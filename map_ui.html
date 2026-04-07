@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map UI - Demo</title>
+    <!-- Leaflet.js dependencies -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100vw; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        /**
+         * Map UI and location rendering demo
+         * 
+         * Features:
+         * - Create map interface
+         * - Show current location
+         * - Add zoom and pan support
+         * - Add destination marker on click
+         */
+        
+        // Initialize map
+        const map = L.map('map').setView([51.505, -0.09], 13);
+        
+        // Set up the OSM layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add user location feature
+        map.locate({setView: true, maxZoom: 16});
+
+        map.on('locationfound', function(e) {
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are here").openPopup();
+            L.circle(e.latlng, e.accuracy).addTo(map);
+        });
+
+        // Destination marker placement on click
+        map.on('click', function(e) {
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Destination").openPopup();
+        });
+    </script>
+</body>
+</html>
